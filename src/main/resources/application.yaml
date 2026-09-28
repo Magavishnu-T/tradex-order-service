@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: tradex-order-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tradex?currentSchema=tradex_management
+    username: postgres
+    password: tradex
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    connect-retries: 5
+    create-schemas: true
+    table: schema_history
+    baseline-on-migrate: true
+    schemas: tradex_management
+    locations: "classpath:db/migration"
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+    consumer:
+      group-id: group_id
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+    properties:
+      security-protocol: SASL_SSL
+      sasl-mechanism: PLAIN      # SASL authentication mechanism
+      sasl-jaas-config: >-
+        org.apache.kafka.common.security.plain.PlainLoginModule required
+        username="your_confluent_api_key"
+        password="your_confluent_api_secret";
+      schema-registry-url: "http://localhost:8081"  # Confluent Schema Registry URL
+      specific-avro-reader: true  
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri:  http://localhost:8080/realms/tradex
+
+kafka:
+  orderCreateTopic: tradex.order.created
+    
+server:
+  port: 8081

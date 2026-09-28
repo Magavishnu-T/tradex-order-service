@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: tradex-order-service
+  datasource:
+    url: jdbc:h2:mem:tradex;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password: root
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+    consumer:
+      group-id: tradex-order-service-test
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+    properties:
+      specific-avro-reader: true
+
+kafka:
+  orderCreateTopic: tradex.order.created

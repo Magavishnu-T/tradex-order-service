@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OrderCreateRequest",
+  "type": "object",
+  "required": [
+    "symbol",
+    "quantity",
+    "side",
+    "orderType"
+  ],
+  "properties": {
+    "symbol": {
+      "type": "string",
+      "example": "RELIANCE"
+    },
+    "quantity": {
+      "type": "integer",
+      "minimum": 1,
+      "example": 10
+    },
+    "side": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL"
+      ],
+      "example": "BUY"
+    },
+    "orderType": {
+      "type": "string",
+      "enum": [
+        "MARKET",
+        "LIMIT"
+      ],
+      "example": "MARKET"
+    },
+    "price": {
+      "type": "number",
+      "format": "double",
+      "example": 1425.50
+    }
+  }
+}
